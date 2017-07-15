@@ -1,0 +1,9 @@
+{
+  "name": "itunes-sanitize",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "itunes-data": "^0.1.3"
+  }
+}
