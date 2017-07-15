@@ -2,7 +2,7 @@ const featRegex = /\((featuring|feat\.|feat)\s+/i
 const albumFeatRegex = /\s*\(feat([^\)]+)\)/i
 const whitespaceRegex = /\s+/g
 const apostropheRegex = /([a-z])'(s|t)/g
-const oxfordCommaRegex = /([a-z]), (&|and)/g
+const oxfordCommaRegex = /([a-z\.]), (&|and)/g
 const acceptableGenres = new Set([
 	'Alternative',
 	'Comedy',
