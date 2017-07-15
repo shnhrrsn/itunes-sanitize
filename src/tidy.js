@@ -2,6 +2,7 @@ const featRegex = /\((featuring|feat\.|feat)\s+/i
 const albumFeatRegex = /\s*\(feat([^\)]+)\)/i
 const whitespaceRegex = /\s+/g
 const apostropheRegex = /([a-z])'(s|t)/g
+const oxfordCommaRegex = /([a-z]), (&|and)/g
 const acceptableGenres = new Set([
 	'Alternative',
 	'Comedy',
@@ -27,6 +28,7 @@ function tidyName(track, changes, original) {
 	sanitizedName = sanitizedName.replace(']', ')')
 	sanitizedName = sanitizedName.replace(featRegex, '(Feat. ')
 	sanitizedName = sanitizedName.replace(apostropheRegex, '$1’$2')
+	sanitizedName = sanitizedName.replace(oxfordCommaRegex, '$1 $2')
 
 	if(originalName != sanitizedName) {
 		original.name = originalName
@@ -49,6 +51,7 @@ function tidyAlbum(track, changes, original) {
 	sanitizedAlbum = sanitizedAlbum.replace(featRegex, '(Feat. ')
 	sanitizedAlbum = sanitizedAlbum.replace(albumFeatRegex, '')
 	sanitizedAlbum = sanitizedAlbum.replace(apostropheRegex, '$1’$2')
+	sanitizedAlbum = sanitizedAlbum.replace(oxfordCommaRegex, '$1 $2')
 
 	if(originalAlbum != sanitizedAlbum) {
 		original.album = originalAlbum
