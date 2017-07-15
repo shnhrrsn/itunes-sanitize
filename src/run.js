@@ -21,34 +21,21 @@ async function run() {
 
 	await new Promise((resolve, reject) => {
 		parser.on('error', reject)
-		stream.pipe(parser)
 		stream.on('error', reject)
 		stream.on('end', resolve)
+		stream.pipe(parser)
 	})
 
 	for(const update of updates) {
 		console.log('Processing', update)
 
 		await osa(function(iTunes, data) {
-			const track = iTunes.tracks.whose({
-				persistentID: data.persistentID
-			})()[0]
+			const query = iTunes.tracks.whose({ persistentID: data.persistentID })
+			const track = query()[0]
 
-			if(data.changes.name) {
+			for(const field of Object.keys(data.changes)) {
 				try {
-					track.name = data.changes.name
-				} catch(e) { }
-			}
-
-			if(data.changes.album) {
-				try {
-					track.album = data.changes.album
-				} catch(e) { }
-			}
-
-			if(data.changes.genre) {
-				try {
-					track.genre = data.changes.genre
+					track[field] = data.changes[field]
 				} catch(e) { }
 			}
 		}, update)
