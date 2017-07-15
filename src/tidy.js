@@ -1,8 +1,12 @@
 const featRegex = /\((featuring|feat\.|feat)\s+/i
 const albumFeatRegex = /\s*\(feat([^\)]+)\)/i
 const whitespaceRegex = /\s+/g
-const apostropheRegex = /([a-z])'(s|t)/g
-const oxfordCommaRegex = /([a-z\.]), (&|and)/g
+const apostropheRegex = /([a-z])'(s|t|d|m)/gi
+const smartquoteSingleOpen = /(^|\s)'([a-z])/gi
+const smartquoteDoubleOpen = /(^|\s)"([a-z])/gi
+const smartquoteSingleClose = /([a-z\.])'(\s|$)/gi
+const smartquoteDoubleClose = /([a-z\.])"(\s|$)/gi
+const oxfordCommaRegex = /([a-z\.]), (&|and)/gi
 const acceptableGenres = new Set([
 	'Alternative',
 	'Comedy',
@@ -14,6 +18,16 @@ const acceptableGenres = new Set([
 	'Reggae',
 	'Rock'
 ])
+
+function smartPunctuation(str) {
+	str = str.replace(apostropheRegex, '$1’$2')
+	str = str.replace(smartquoteSingleOpen, '$1‘$2')
+	str = str.replace(smartquoteSingleClose, '$1’$2')
+	str = str.replace(smartquoteDoubleOpen, '$1“$2')
+	str = str.replace(smartquoteDoubleClose, '$1”$2')
+	str = str.replace(oxfordCommaRegex, '$1 $2')
+	return str.replace('...', '…')
+}
 
 function tidyName(track, changes, original) {
 	const originalName = track.Name
@@ -27,8 +41,7 @@ function tidyName(track, changes, original) {
 	sanitizedName = sanitizedName.replace('[', '(')
 	sanitizedName = sanitizedName.replace(']', ')')
 	sanitizedName = sanitizedName.replace(featRegex, '(Feat. ')
-	sanitizedName = sanitizedName.replace(apostropheRegex, '$1’$2')
-	sanitizedName = sanitizedName.replace(oxfordCommaRegex, '$1 $2')
+	sanitizedName = smartPunctuation(sanitizedName)
 
 	if(originalName != sanitizedName) {
 		original.name = originalName
@@ -50,8 +63,7 @@ function tidyAlbum(track, changes, original) {
 	sanitizedAlbum = sanitizedAlbum.replace(']', ')')
 	sanitizedAlbum = sanitizedAlbum.replace(featRegex, '(Feat. ')
 	sanitizedAlbum = sanitizedAlbum.replace(albumFeatRegex, '')
-	sanitizedAlbum = sanitizedAlbum.replace(apostropheRegex, '$1’$2')
-	sanitizedAlbum = sanitizedAlbum.replace(oxfordCommaRegex, '$1 $2')
+	sanitizedAlbum = smartPunctuation(sanitizedAlbum)
 
 	if(originalAlbum != sanitizedAlbum) {
 		original.album = originalAlbum
