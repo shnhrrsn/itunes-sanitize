@@ -5,6 +5,10 @@ module.exports = function parseTrack(track) {
 		return null
 	}
 
+	if(track['Playlist Only'] !== void 0) {
+		return null
+	}
+
 	if(track['Date Added'] === void 0) {
 		return null
 	}
