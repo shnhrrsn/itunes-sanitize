@@ -4,7 +4,7 @@ const fs = require('fs')
 const itunes = require('itunes-data')
 
 async function run() {
-	const library = `${process.env.HOME}/Music/iTunes/iTunes Music Library.xml`
+	const library = `${process.env.HOME}/Music/iTunes/iTunes Library.xml`
 	const stream = fs.createReadStream(library)
 	const parser = itunes.parser()
 	const updates = [ ]
